@@ -9323,18 +9323,18 @@ static void update_heartbeat(struct work_struct *work)
 		schedule_delayed_work(&chip->batt_protect_policy_temp_work, 0);
 
 	if(smbchg_debug_mask == 0xFF)   //ZTE_PM used smbchg_debug_mask for log debug.
-		dump_regs(chip);
-		temp = temp/10;
-		voltage		=	get_prop_batt_voltage_now(chip)/1000;
-		cap			=	get_prop_batt_capacity(chip);
-		status		=	get_prop_batt_status(chip);
-		charge_type	=	get_prop_charge_type(chip);
-		present		=	get_prop_batt_present(chip);
-		chg_current	=	get_prop_batt_current_now(chip);
-		usbin_v		=	zte_get_usbin_voltage_now(chip);
-		usb_current	=	smbchg_get_iusb(chip);
-		health = get_prop_batt_health(chip);
-		printk_counter++;
+	dump_regs(chip);
+	temp = temp/10;
+	voltage		=	get_prop_batt_voltage_now(chip)/1000;
+	cap			=	get_prop_batt_capacity(chip);
+	status		=	get_prop_batt_status(chip);
+	charge_type	=	get_prop_charge_type(chip);
+	present		=	get_prop_batt_present(chip);
+	chg_current	=	get_prop_batt_current_now(chip);
+	usbin_v		=	zte_get_usbin_voltage_now(chip);
+	usb_current	=	smbchg_get_iusb(chip);
+	health = get_prop_batt_health(chip);
+	printk_counter++;
 
 		if ((usb_present) && (chg_current > 0) && (charge_type_oem == CHARGER_TYPE_HVDCP)
 			&& (chip->apsd_rerun_flag == APSD_RERUN_FLAG_DEFAULT) && (!socinfo_get_charger_flag())
