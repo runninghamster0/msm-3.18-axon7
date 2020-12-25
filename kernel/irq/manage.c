@@ -212,7 +212,11 @@ int irq_set_affinity_locked(struct irq_data *data, const struct cpumask *mask,
 
 	if (desc->affinity_notify) {
 		kref_get(&desc->affinity_notify->kref);
-		schedule_work(&desc->affinity_notify->work);
+		if (!schedule_work(&desc->affinity_notify->work)) {
+			/* Work was already scheduled, drop our extra ref */
+			kref_put(&desc->affinity_notify->kref,
+				 desc->affinity_notify->release);
+		}
 	}
 	irqd_set(data, IRQD_AFFINITY_SET);
 
@@ -317,8 +321,8 @@ irq_set_affinity_notifier(unsigned int irq, struct irq_affinity_notify *notify)
 	if (old_notify) {
 		if (cancel_work_sync(&old_notify->work)) {
 			/* Pending work had a ref, put that one too */
-		        kref_put(&old_notify->kref, old_notify->release);
-	        }
+			kref_put(&old_notify->kref, old_notify->release);
+		}
 		kref_put(&old_notify->kref, old_notify->release);
 	}
 
